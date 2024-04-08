@@ -6,10 +6,11 @@ import (
 	b64 "encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"goth/internal/store"
 	"log"
 	"net/http"
 	"strings"
+
+	"goth/internal/store"
 )
 
 type key string
@@ -49,11 +50,13 @@ func CSPMiddleware(next http.Handler) http.Handler {
 		// set nonces in context
 		ctx := context.WithValue(r.Context(), NonceKey, nonceSet)
 		// insert the nonces into the content security policy header
-		cspHeader := fmt.Sprintf("default-src 'self'; script-src 'nonce-%s' 'nonce-%s' ; style-src 'nonce-%s' '%s';",
+		cspHeader := fmt.Sprintf(
+			"default-src 'self'; script-src 'nonce-%s' 'nonce-%s' ; style-src 'self' 'nonce-%s' '%s';",
 			nonceSet.Htmx,
 			nonceSet.ResponseTargets,
 			nonceSet.Tw,
-			nonceSet.HtmxCSSHash)
+			nonceSet.HtmxCSSHash,
+		)
 		w.Header().Set("Content-Security-Policy", cspHeader)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
@@ -118,9 +121,7 @@ var UserKey UserContextKey = "user"
 
 func (m *AuthMiddleware) AddUserToContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		sessionCookie, err := r.Cookie(m.sessionCookieName)
-
 		if err != nil {
 			fmt.Println("error getting session cookie", err)
 			next.ServeHTTP(w, r)
@@ -128,7 +129,6 @@ func (m *AuthMiddleware) AddUserToContext(next http.Handler) http.Handler {
 		}
 
 		decodedValue, err := b64.StdEncoding.DecodeString(sessionCookie.Value)
-
 		if err != nil {
 			next.ServeHTTP(w, r)
 			return
@@ -148,7 +148,6 @@ func (m *AuthMiddleware) AddUserToContext(next http.Handler) http.Handler {
 		fmt.Println("userID", userID)
 
 		user, err := m.sessionStore.GetUserFromSession(sessionID, userID)
-
 		if err != nil {
 			next.ServeHTTP(w, r)
 			return
