@@ -31,14 +31,11 @@ templ nav() {
 				<li>
 					<a class="text-gray-200" href="/">Home</a>
 				</li>
-				<li>
-					<a class="text-gray-200" href="/about">About</a>
-				</li>
 			</ol>
 			<ol class="flex space-x-4">
 				if middleware.GetUser(ctx) != nil {
 					<li>
-						<button class="text-gray-200" hx-post="/logout">Logout</button>
+						<button class="text-gray-200" hx-post="/logout" hx-target="body">Logout</button>
 					</li>
 				} else {
 					<li>
