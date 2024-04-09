@@ -3,3 +3,6 @@ tmp
 *.db
 tailwindcss
 .envrc
+*_templ.go
+*_templ.txt
+

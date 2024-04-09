@@ -51,7 +51,7 @@ func CSPMiddleware(next http.Handler) http.Handler {
 		ctx := context.WithValue(r.Context(), NonceKey, nonceSet)
 		// insert the nonces into the content security policy header
 		cspHeader := fmt.Sprintf(
-			"default-src 'self'; script-src 'nonce-%s' 'nonce-%s' ; style-src 'self' 'nonce-%s' '%s';",
+			"default-src 'self'; script-src 'self' 'nonce-%s' 'nonce-%s' ; style-src 'self' 'nonce-%s' '%s';",
 			nonceSet.Htmx,
 			nonceSet.ResponseTargets,
 			nonceSet.Tw,

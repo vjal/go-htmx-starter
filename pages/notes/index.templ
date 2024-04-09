@@ -1,0 +1,21 @@
+package notes
+
+import "fmt"
+
+templ NotesPage(notes []Note) {
+	<div>
+		<h1>Notes page</h1>
+		<ol>
+			for _, note := range notes {
+				<li><a href={ templ.URL(fmt.Sprintf("/notes/%d", note.Id)) }>{ note.Title }</a></li>
+			}
+		</ol>
+	</div>
+}
+
+templ NotePage(note Note) {
+	<div>
+		<h1>{ note.Title }</h1>
+		<p>{ note.Body }</p>
+	</div>
+}

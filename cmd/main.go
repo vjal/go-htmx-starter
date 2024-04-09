@@ -19,6 +19,7 @@ import (
 	m "goth/internal/middleware"
 	database "goth/internal/store/db"
 	"goth/internal/store/dbstore"
+	"goth/pages/notes"
 )
 
 /*
@@ -70,7 +71,9 @@ func main() {
 
 		r.Get("/", handlers.NewHomeHandler().ServeHTTP)
 
-		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)
+		r.Get("/notes", notes.NotesHandler)
+
+		r.Get("/notes/{id}", notes.NoteHandler)
 
 		r.Get("/register", handlers.NewGetRegisterHandler().ServeHTTP)
 
